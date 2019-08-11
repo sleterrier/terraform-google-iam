@@ -10,22 +10,25 @@ provider "google-beta" {
 }
 
 /******************************************
-  Module folder_iam_binding calling
+  Module pubsub_topic_iam_binding calling
  *****************************************/
-module "folder-iam" {
+module "pubsub_topic-iam" {
   source  = "../../"
 
-  folders = [ "${var.folder_one}", "${var.folder_two}" ]
-  mode    = "additive"
+  mode          = "additive"
+  pubsub_topics = [ "${var.pubsub_topic_one}", "${var.pubsub_topic_two}" ]
 
   bindings = {
-    "roles/resourcemanager.folderEditor" = [
+    "roles/pubsub.publisher" = [
       "serviceAccount:${var.sa_email}",
       "group:${var.group_email}",
+      "user:${var.user_email}",
     ]
-
-    "roles/resourcemanager.folderViewer" = [
+    "roles/pubsub.viewer" = [
+      "serviceAccount:${var.sa_email}",
+      "group:${var.group_email}",
       "user:${var.user_email}",
     ]
   }
 }
+

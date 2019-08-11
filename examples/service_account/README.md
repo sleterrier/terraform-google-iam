@@ -1,20 +1,22 @@
-# Folder example
+# Service Account example
 
 ## Usage
 ```hcl
-module "folder-iam" {
+module "service_account-iam" {
   source  = "../../"
 
-  folders = [ "${var.folder_one}", "${var.folder_two}" ]
-  mode    = "additive"
+  mode             = "additive"
+  service_accounts = [ "${var.service_account_one}", "${var.service_account_two}" ]
 
   bindings = {
-    "roles/resourcemanager.folderEditor" = [
+    "roles/iam.serviceAccountKeyAdmin" = [
       "serviceAccount:${var.sa_email}",
       "group:${var.group_email}",
+      "user:${var.user_email}",
     ]
-
-    "roles/resourcemanager.folderViewer" = [
+    "roles/iam.serviceAccountTokenCreator" = [
+      "serviceAccount:${var.sa_email}",
+      "group:${var.group_email}",
       "user:${var.user_email}",
     ]
   }
@@ -25,8 +27,8 @@ module "folder-iam" {
 
 | Name | Description | Type | Default | Required |
 |------|-------------|:----:|:-----:|:-----:|
-| folder\_one | The first folder ID to apply IAM bindings | string | `"folders/folder-1"` | no |
-| folder\_two | The second folder ID to apply IAM bindings | string | `"folders/folder-2"` | no |
+| service_account\_one | The first service_account ID to apply IAM bindings | string | `"service-account-1@project.iam.gserviceaccount.com"` | no |
+| service_account\_two | The second service_account ID to apply IAM bindings | string | `"service-account-2@project.iam.gserviceaccount.com"` | no |
 | group\_email | Email for group to receive roles \(ex. group@example.com\) | string | `"group@example.com"` | no |
 | sa\_email | Email for Service Account to receive roles \(Ex. default-sa@example-project-id.iam.gserviceaccount.com\) | string | `"default-sa@example-project-id.iam.gserviceaccount.com"` | no |
 | user\_email | Email for group to receive roles \(Ex. user@example.com\) | string | `"user@example.com"` | no |

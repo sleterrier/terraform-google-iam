@@ -10,22 +10,23 @@ provider "google-beta" {
 }
 
 /******************************************
-  Module folder_iam_binding calling
+  Module kms_crypto_key_iam_binding calling
  *****************************************/
-module "folder-iam" {
+module "kms_crypto_key-iam" {
   source  = "../../"
 
-  folders = [ "${var.folder_one}", "${var.folder_two}" ]
-  mode    = "additive"
+  kms_crypto_keys = [ "${var.kms_crypto_key_one}", "${var.kms_crypto_key_two}" ]
+  mode            = "authoritative"
 
   bindings = {
-    "roles/resourcemanager.folderEditor" = [
-      "serviceAccount:${var.sa_email}",
-      "group:${var.group_email}",
-    ]
-
-    "roles/resourcemanager.folderViewer" = [
+    "roles/cloudkms.cryptoKeyEncrypter" = [
       "user:${var.user_email}",
+      "group:${var.group_email}",
+      "serviceAccount:${var.sa_email}",
+    ]
+    "roles/cloudkms.cryptoKeyDecrypter" = [
+      "user:${var.user_email}",
+      "group:${var.group_email}",
     ]
   }
 }

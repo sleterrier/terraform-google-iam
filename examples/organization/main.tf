@@ -10,21 +10,23 @@ provider "google-beta" {
 }
 
 /******************************************
-  Module folder_iam_binding calling
+  Module organization_iam_binding calling
  *****************************************/
-module "folder-iam" {
+module "organization-iam" {
   source  = "../../"
 
-  folders = [ "${var.folder_one}", "${var.folder_two}" ]
-  mode    = "additive"
+  mode = "additive"
+  organizations = [ "${var.organization_one}", "${var.organization_two}" ]
 
   bindings = {
-    "roles/resourcemanager.folderEditor" = [
+    "roles/resourcemanager.organizationViewer" = [
       "serviceAccount:${var.sa_email}",
       "group:${var.group_email}",
+      "user:${var.user_email}",
     ]
-
-    "roles/resourcemanager.folderViewer" = [
+    "roles/resourcemanager.projectDeleter" = [
+      "serviceAccount:${var.sa_email}",
+      "group:${var.group_email}",
       "user:${var.user_email}",
     ]
   }
